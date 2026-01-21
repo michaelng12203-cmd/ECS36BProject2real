@@ -179,6 +179,8 @@ TEST_F(SVGTest, CreateEdgeCases){
     
     EXPECT_EQ(svg_create(write_callback, cleanup_callback, &DOutput, 0, 0), nullptr);
     EXPECT_EQ(svg_create(nullptr, cleanup_callback, &DOutput, 100, 100), nullptr);
+    //EXPECT_EQ(svg_create(write_callback, cleanup_callback, nullptr, 0, 0), nullptr);
+
 }   
 
 TEST_F(SVGTest, DestroyEdgeCases){

@@ -38,10 +38,19 @@ TEST_STRSINK_OBJ_FILES	= $(TEST_STRSINK_OBJ) $(TEST_STRSINK_TEST_OBJ)
 TEST_STRSRC_OBJ			= $(TESTOBJ_DIR)/StringDataSource.o
 TEST_STRSRC_TEST_OBJ 	= $(TESTOBJ_DIR)/StringDataSourceTest.o
 
+MAIN_OBJ			= $(OBJ_DIR)/main.o
+SVG_OBJ			= $(OBJ_DIR)/svg.o
+LIBSVG 			= $(LIB_DIR)/libsvg.a
+
 
 # Define the targets
 TEST_SVG_TARGET			= $(TESTBIN_DIR)/testsvg
 TEST_STRSINK_TARGET 	= $(TESTBIN_DIR)/testteststrdatasink
+
+TEST_TARGET_MAIN		= $(BIN_DIR)/main.out
+CHECKMARK_OUTPUT	= checkmark.svg
+CHECKMARK_ANSWER	= expected_checkmark.svg
+
 
 
 all: directories run_svgtest run_sinktest gen_html
@@ -56,6 +65,12 @@ gen_html:
 	lcov --capture --directory . --output-file $(TESTCOVER_DIR)/coverage.info --ignore-errors inconsistent,source
 	lcov --remove $(TESTCOVER_DIR)/coverage.info '/usr/*' '*/testsrc/*' --output-file $(TESTCOVER_DIR)/coverage.info
 	genhtml $(TESTCOVER_DIR)/coverage.info --output-directory $(TESTCOVER_DIR)
+
+runcheckmark: $(TEST_TARGET_MAIN)
+	$(TEST_TARGET_MAIN)
+	@xmldiff --check $(CHECKMARK_OUTPUT) $(CHECKMARK_ANSWER) > /dev/null 2>&1 && \
+	echo "SVGs are identical ✅" || \
+	(echo "SVGs differ ❌"; exit 1)
 
 $(TEST_SVG_TARGET): $(TEST_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_SVG_TARGET)
@@ -74,6 +89,19 @@ $(TESTOBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 $(TESTOBJ_DIR)/%.o: $(TESTSRC_DIR)/%.cpp
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(DEFINES) $(INCLUDE) -c $< -o $@
+
+
+$(MAIN_OBJ): $(SRC_DIR)/main.c
+	$(CC) $(CLFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/main.c -o $(MAIN_OBJ)
+
+$(SVG_OBJ): $(SRC_DIR)/svg.c
+	$(CC) $(CLFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(SVG_OBJ)
+
+$(LIBSVG): $(SVG_OBJ) $(MAIN_OBJ)
+	ar rcs $(LIBSVG) $(SVG_OBJ) $(MAIN_OBJ)
+
+$(TEST_TARGET_MAIN): $(LIBSVG)
+	$(CC) $(CLFLAGS) -o $(BIN_DIR)/main.out $(LIBSVG)
 
 directories:
 	mkdir -p $(BIN_DIR)

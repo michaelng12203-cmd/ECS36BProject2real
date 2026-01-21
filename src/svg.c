@@ -39,9 +39,9 @@ svg_context_ptr svg_create(svg_write_fn write_fn,
         return NULL;    
     }
 
-    /*if(user == NULL){
+    if(user == NULL){
         return NULL;    
-    }*/
+    }
 
     int size = snprintf(NULL, 0,"<svg width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">",
                         width, height);
