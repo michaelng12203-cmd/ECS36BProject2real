@@ -18,9 +18,9 @@ TESTCOVER_DIR		= ./htmlconv
 DEFINES				=
 INCLUDE				= -I $(INC_DIR)
 ARFLAGS				= rcs
-CLFAGS				= -Wall
+CFLAGS				= -Wall
 CPPFLAGS			= --std=c++20
-LDFLAGS				=
+LDFLAGS				= -lexpat
 
 TEST_CFLAGS			= $(CFLAGS) -O0 -g --coverage
 TEST_CPPFLAGS		= $(CPPFLAGS) -fno-inline
@@ -45,7 +45,7 @@ TEST_XML_OBJ_FILES	= $(TEST_XML_OBJ) $(TEST_XML_TEST_OBJ)
 
 TEST_WRITER_OBJ 		= $(TESTOBJ_DIR)/SVGWriter.o
 TEST_WRITER_TEST_OBJ 	= $(TESTOBJ_DIR)/SVGWriterTest.o
-TEST_WRITER_OBJ_FILES	= $(TEST_WRITER_OBJ) $(TEST_WRITER_TEST_OBJ)
+TEST_WRITER_OBJ_FILES	= $(TEST_WRITER_OBJ) $(TEST_WRITER_TEST_OBJ) $(LIBSVG)
 
 MAIN_OBJ			= $(OBJ_DIR)/main.o
 SVG_OBJ			= $(OBJ_DIR)/svg.o
@@ -123,16 +123,16 @@ $(TESTOBJ_DIR)/%.o: $(TESTSRC_DIR)/%.cpp
 
 
 $(MAIN_OBJ): $(SRC_DIR)/main.c
-	$(CC) $(CLFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/main.c -o $(MAIN_OBJ)
+	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/main.c -o $(MAIN_OBJ)
 
 $(SVG_OBJ): $(SRC_DIR)/svg.c
-	$(CC) $(CLFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(SVG_OBJ)
+	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(SVG_OBJ)
 
 $(LIBSVG): $(SVG_OBJ) $(MAIN_OBJ)
 	ar rcs $(LIBSVG) $(SVG_OBJ) $(MAIN_OBJ)
 
 $(TEST_TARGET_MAIN): $(LIBSVG)
-	$(CC) $(CLFLAGS) -o $(BIN_DIR)/main.out $(LIBSVG)
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/main.out $(LIBSVG)
 
 directories:
 	mkdir -p $(BIN_DIR)
