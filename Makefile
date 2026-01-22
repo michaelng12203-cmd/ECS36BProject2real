@@ -19,7 +19,7 @@ DEFINES				=
 INCLUDE				= -I $(INC_DIR)
 ARFLAGS				= rcs
 CLFAGS				= -Wall
-CPPFLAGS			= --std=c++17
+CPPFLAGS			= --std=c++20
 LDFLAGS				=
 
 TEST_CFLAGS			= $(CFLAGS) -O0 -g --coverage
@@ -37,6 +37,15 @@ TEST_STRSINK_OBJ_FILES	= $(TEST_STRSINK_OBJ) $(TEST_STRSINK_TEST_OBJ)
 
 TEST_STRSRC_OBJ			= $(TESTOBJ_DIR)/StringDataSource.o
 TEST_STRSRC_TEST_OBJ 	= $(TESTOBJ_DIR)/StringDataSourceTest.o
+TEST_STRSRC_OBJ_FILES	= $(TEST_STRSRC_OBJ) $(TEST_STRSRC_TEST_OBJ)
+
+TEST_XML_OBJ 		= $(TESTOBJ_DIR)/XMLReader.o
+TEST_XML_TEST_OBJ 	= $(TESTOBJ_DIR)/XMLTest.o
+TEST_XML_OBJ_FILES	= $(TEST_XML_OBJ) $(TEST_XML_TEST_OBJ)
+
+TEST_WRITER_OBJ 		= $(TESTOBJ_DIR)/SVGWriter.o
+TEST_WRITER_TEST_OBJ 	= $(TESTOBJ_DIR)/SVGWriterTest.o
+TEST_WRITER_OBJ_FILES	= $(TEST_WRITER_OBJ) $(TEST_WRITER_TEST_OBJ)
 
 MAIN_OBJ			= $(OBJ_DIR)/main.o
 SVG_OBJ			= $(OBJ_DIR)/svg.o
@@ -45,7 +54,10 @@ LIBSVG 			= $(LIB_DIR)/libsvg.a
 
 # Define the targets
 TEST_SVG_TARGET			= $(TESTBIN_DIR)/testsvg
-TEST_STRSINK_TARGET 	= $(TESTBIN_DIR)/testteststrdatasink
+TEST_STRSINK_TARGET 	= $(TESTBIN_DIR)/teststrdatasink
+TEST_STRSRC_TARGET 	= $(TESTBIN_DIR)/teststrdatasource
+TEST_WRITER_TARGET 	= $(TESTBIN_DIR)/testsvgwriter
+TEST_XML_TARGET 		= $(TESTBIN_DIR)/testxml
 
 TEST_TARGET_MAIN		= $(BIN_DIR)/main.out
 CHECKMARK_OUTPUT	= checkmark.svg
@@ -53,13 +65,22 @@ CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
 
-all: directories run_svgtest run_sinktest gen_html
+all: directories run_svgtest run_srctest run_sinktest run_xmltest run_writertest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
 
+run_srctest: $(TEST_STRSRC_TARGET)
+	$(TEST_STRSRC_TARGET)
+
 run_sinktest: $(TEST_STRSINK_TARGET)
 	$(TEST_STRSINK_TARGET)
+
+run_xmltest: $(TEST_XML_TARGET)
+	$(TEST_XML_TARGET)
+
+run_writertest: $(TEST_WRITER_TARGET)
+	$(TEST_WRITER_TARGET)
 
 gen_html:
 	lcov --capture --directory . --output-file $(TESTCOVER_DIR)/coverage.info --ignore-errors inconsistent,source
@@ -75,8 +96,18 @@ runcheckmark: $(TEST_TARGET_MAIN)
 $(TEST_SVG_TARGET): $(TEST_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_SVG_TARGET)
 
+$(TEST_STRSRC_TARGET): $(TEST_STRSRC_OBJ_FILES)
+	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_STRSRC_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_STRSRC_TARGET)
+
 $(TEST_STRSINK_TARGET): $(TEST_STRSINK_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_STRSINK_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_STRSINK_TARGET)
+
+$(TEST_XML_TARGET): $(TEST_XML_OBJ_FILES)
+	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_XML_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_XML_TARGET)
+
+$(TEST_WRITER_TARGET): $(TEST_WRITER_OBJ_FILES)
+	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_WRITER_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_WRITER_TARGET)
+
 
 $(TEST_SVG_OBJ): $(SRC_DIR)/svg.c
 	$(CC) $(TEST_CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(TEST_SVG_OBJ)
