@@ -27,8 +27,6 @@ TEST_CPPFLAGS		= $(CPPFLAGS) -fno-inline
 TEST_LDFLAGS		= $(LDFLAGS) -lgtest -lgtest_main -lpthread
 
 # Define the object files
-SVG_OBJ 			= $(OBJ_DIR)/svg.o
-
 TEST_SVG_OBJ		= $(TESTOBJ_DIR)/svg.o
 TEST_SVG_TEST_OBJ	= $(TESTOBJ_DIR)/SVGTest.o
 TEST_OBJ_FILES		= $(TEST_SVG_OBJ) $(TEST_SVG_TEST_OBJ)
@@ -67,12 +65,10 @@ CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
 
-all: directories run_svgtest make_lib run_srctest run_sinktest run_xmltest run_writertest gen_html
+all: directories run_svgtest run_srctest run_sinktest run_xmltest run_writertest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
-
-make_lib: $(LIBSVG)
 
 run_srctest: $(TEST_STRSRC_TARGET)
 	$(TEST_STRSRC_TARGET)
@@ -115,9 +111,6 @@ $(TEST_WRITER_TARGET): $(TEST_WRITER_OBJ_FILES)
 
 $(TEST_SVG_OBJ): $(SRC_DIR)/svg.c
 	$(CC) $(TEST_CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(TEST_SVG_OBJ)
-
-$(SVG_OBJ): $(SRC_DIR)/svg.c
-	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(SVG_OBJ)
 
 $(TEST_SVG_TEST_OBJ): $(TESTSRC_DIR)/SVGTest.cpp
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(DEFINES) $(INCLUDE) -c $(TESTSRC_DIR)/SVGTest.cpp -o $(TEST_SVG_TEST_OBJ)
