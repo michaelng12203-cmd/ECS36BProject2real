@@ -50,10 +50,9 @@ svg_context_ptr svg_create(svg_write_fn write_fn,
                         width, height);
 
     write_fn(user, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    write_fn(user, "\n");
     write_fn(user, buffer);
     free(buffer);
-    write_fn(user, ">\n");
+    write_fn(user, ">");
 
     return context;
 

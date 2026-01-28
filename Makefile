@@ -128,11 +128,11 @@ $(MAIN_OBJ): $(SRC_DIR)/main.c
 $(SVG_OBJ): $(SRC_DIR)/svg.c
 	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $(SRC_DIR)/svg.c -o $(SVG_OBJ)
 
-$(LIBSVG): $(SVG_OBJ) $(MAIN_OBJ)
-	ar rcs $(LIBSVG) $(SVG_OBJ) $(MAIN_OBJ)
+$(LIBSVG): $(SVG_OBJ) 
+	ar rcs $(LIBSVG) $(SVG_OBJ)
 
-$(TEST_TARGET_MAIN): $(LIBSVG)
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/main.out $(LIBSVG)
+$(TEST_TARGET_MAIN): $(MAIN_OBJ) $(LIBSVG)
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/main.out $(MAIN_OBJ) $(LIBSVG)
 
 directories:
 	mkdir -p $(BIN_DIR)
