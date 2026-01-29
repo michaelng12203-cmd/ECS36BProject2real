@@ -3,51 +3,96 @@
 #include "StringDataSource.h"
 
 TEST(XMLReaderTest, SimpleTest){
-    std::string str = "<Genshin>Hello</Impact>";
+    std::string str = "<Genshin>Hello</Genshin>";
     std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
 
-    {CXMLReader Reader(Source);
+    {
+    CXMLReader Reader(Source);
     SXMLEntity entity;
 
     EXPECT_TRUE(Reader.ReadEntity(entity, true));
     EXPECT_EQ(entity.DNameData, "Genshin");
-
     }
 }
 
 TEST(XMLReaderTest, ElementTest){
+    std::string str = "<Isagi number=\"11\" color=\"blue\" rank=\"1\">Striker</Isagi>";
+    std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
 
+    {
+    CXMLReader Reader(Source);
+    SXMLEntity entity;
+    Reader.ReadEntity(entity, true);
+    EXPECT_EQ(entity.DType, SXMLEntity::EType::StartElement);
+
+    
+    EXPECT_EQ(entity.AttributeValue("color"), "blue");
+
+    SXMLEntity entity2;
+    Reader.ReadEntity(entity2, true);
+    EXPECT_EQ(entity2.DType, SXMLEntity::EType::EndElement);
+    }
 }
 
 TEST(XMLReaderTest, CDataTest){
-    /*std::string str = "<rootUmamusume>Hello</root>";
+    std::string str = "<Kaiser>FrierentheSlayer</Kaiser>";
+    std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
+
+    {CXMLReader Reader(Source);
+    SXMLEntity entity;
+    Reader.ReadEntity(entity, false);
+    
+    SXMLEntity entity2;
+    Reader.ReadEntity(entity2, false);
+    EXPECT_EQ(entity2.DNameData, "FrierentheSlayer");
+    }
+}
+
+TEST(XMLReaderTest, LongCDataTest){
+    std::string str = "<Kaiser>GinGagamaruIkkiNikoOliverAikuImsoBritishAryuStylishRedPantherNesstheMagicianHioriYoBarouKingShoeiShidouRyuseiPinkDemonMeguruBachiraMonsterYellowTechnicianKingDribblerReoMikageCopyChameleonsukunawoncuzofplotfrfr</Kaiser>";
+    std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
+
+    {CXMLReader Reader(Source);
+    SXMLEntity entity;
+    Reader.ReadEntity(entity, false);
+    
+    SXMLEntity entity2;
+    Reader.ReadEntity(entity2, false);
+    EXPECT_EQ(entity2.DNameData, "GinGagamaruIkkiNikoOliverAikuImsoBritishAryuStylishRedPantherNesstheMagicianHioriYoBarouKingShoeiShidouRyuseiPinkDemonMeguruBachiraMonsterYellowTechnicianKingDribblerReoMikageCopyChameleonsukunawoncuzofplotfrfr");
+    }
+}
+TEST(XMLReaderTest, SpecialCharacterTest){
+    std::string str = "<Special>\'\"()+-/%</Special>";
     std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
 
     {
         CXMLReader Reader(Source);
         SXMLEntity entity;
-        Reader.ReadEntity(entity, true);
+        Reader.ReadEntity(entity, false);
         SXMLEntity entity2;
         Reader.ReadEntity(entity2, false);
-
-        //std::cout<<entity.DType<<std::endl;
-        std::cout<<entity2.DNameData<<std::endl;
-        //std::cout<<entity.DAttributes<<std::endl;
-
-
-    }*/
+        EXPECT_EQ(entity2.DNameData, "\'\"()+-/%");
+    }
 }
 
-TEST(XMLReaderTest, LongCDataTest){
+    TEST(XMLReaderTest, InvalidXMLTest){
+    std::string str = "";
+    std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
 
-}
+    std::string str2 = "HowDareYouCallThisBro<IamSoSad>";
+    std::shared_ptr<CStringDataSource> Source2 = std::make_shared<CStringDataSource>(str2);
 
-TEST(XMLReaderTest, SpecialCharacterTest){
+    {
+        CXMLReader Reader(Source);
+        SXMLEntity entity;
 
-}
+        EXPECT_FALSE(Reader.ReadEntity(entity, true));
 
-TEST(XMLReaderTest, InvalidXMLTest){
+        CXMLReader Reader2(Source2);
+        SXMLEntity entity2;
 
+        EXPECT_FALSE(Reader2.ReadEntity(entity2, true));
+    }
 }
 
 TEST(XMLReaderTest, LongCharDataCrosses512Boundary){

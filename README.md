@@ -1,52 +1,215 @@
 # Project X README
 
-Student 1: Partner1 Name (123456789)
+Student 1: Michael Nguyen (925426358)
 
-Student 2: Partner2 Name (123456987)
+Student 2: Nicholas DO (924737022)
 
 ## Project Status
-This the current status of the project ...
+This the current status of the project: Fully completed and functional with full coverage (aside from a mysterious bracket)
 
 ## Known Issues
-The project fails to function properly in ...
+The project fails to function properly in: None that we know of
 
 ## Code References
-* [Different ways to initialize variables](https://stackoverflow.com/questions/22543875/different-ways-to-initialize-variables)
-* [Some other link](https://stackoverflow.com)
+* [Expat Functions](https://libexpat.github.io/doc/api/latest/#XML_Parse)
 
 ## Generative AI Use
-I used ChatGPT for Prompt 1, and ZZZZZ for Prompt 2....
+I used ChatGPT for Prompt 1
 
 ### Prompt 1
-How do I iterate over all characters in a string in C++17?
-
+#include "XMLReader.h" #include <expat.h> #include <queue> struct CXMLReader::SImplementation{ }; CXMLReader::CXMLReader(std::shared_ptr< CDataSource > src){ } CXMLReader::~CXMLReader(){ } bool CXMLReader::End() const{ } bool CXMLReader::ReadEntity(SXMLEntity &entity, bool skipcdata){ } Can you help me understand this
 ### Response 1
-In C++17, you can iterate over all characters in a string using a range-based for loop. Here's an example:
-```cpp
-#include <iostream>
-#include <string>
+Yep — this looks confusing at first glance because it’s basically a skeleton with most of the logic missing. Let’s walk through what you’re looking at and why it’s structured this way.
 
-int main() {
-    std::string myString = "Hello, World!";
+Big picture: what is this?
 
-    // Using range-based for loop to iterate over characters in the string
-    for (char c : myString) {
-        std::cout << c << " ";
-    }
+This is the start of a C++ XML reader class that likely uses Expat, a low-level, event-driven XML parsing library.
 
-    return 0;
+Nothing here actually does anything yet — it’s scaffolding.
+
+Line by line, concept by concept
+1. Includes
+#include "XMLReader.h"
+#include <expat.h>
+#include <queue>
+
+
+"XMLReader.h"
+The header where CXMLReader, SXMLEntity, etc. are declared.
+
+<expat.h>
+Expat is a SAX-style XML parser:
+
+You don’t load the whole XML tree
+
+You get callbacks like:
+
+start element
+
+end element
+
+text (CDATA)
+
+<queue>
+Strong hint that parsed XML entities will be queued as they’re read.
+
+2. The mysterious struct
+struct CXMLReader::SImplementation{
+};
+
+
+This is the PIMPL pattern (Pointer to IMPLementation).
+
+Why it exists:
+
+Hide implementation details from the header
+
+Reduce compile times
+
+Keep the public interface clean
+
+In the header you probably have:
+
+class CXMLReader {
+    struct SImplementation;
+    std::unique_ptr<SImplementation> Impl;
+};
+
+
+Eventually, SImplementation will hold things like:
+
+XML_Parser
+
+queues of parsed entities
+
+parsing state
+
+flags like “end of document reached”
+
+Right now it’s empty because the logic hasn’t been written yet.
+
+3. Constructor
+CXMLReader::CXMLReader(std::shared_ptr<CDataSource> src){
 }
-```
-In this example, the `for (char c : myString)` loop iterates over each character in the string `myString`, and the variable `c` takes on the value of each character in turn. The loop body prints each character followed by a space.
 
-This is a concise and readable way to iterate over the characters in a string in C++17.
 
-### Chagnes 1
-I only needed the `for` loop part, and my string was named `bar` so I changed it to just:
-```cpp
-// AI Generated
-for (char c : bar) {
-```
+What this should do (but doesn’t yet):
+
+Store the data source (file, stream, socket, etc.)
+
+Create an XML_Parser
+
+Register Expat callbacks
+
+Initialize internal state
+
+CDataSource is probably an abstraction over input (file, memory buffer, etc.).
+
+4. Destructor
+CXMLReader::~CXMLReader(){
+}
+
+
+Eventually responsible for:
+
+Freeing the Expat parser (XML_ParserFree)
+
+Cleaning up any allocated memory
+
+Letting smart pointers clean themselves up
+
+Empty = not implemented yet.
+
+5. End()
+bool CXMLReader::End() const{
+}
+
+
+This should answer:
+
+“Have we reached the end of the XML stream?”
+
+Typical behavior:
+
+Return true if:
+
+No more entities are available and
+
+The parser has finished reading input
+
+Right now: no return statement → undefined behavior (this won’t even compile).
+
+6. ReadEntity()
+bool CXMLReader::ReadEntity(SXMLEntity &entity, bool skipcdata){
+}
+
+
+This is the core method.
+
+Likely intent:
+
+Pull the next parsed XML “entity” from an internal queue
+
+Fill entity with:
+
+element start
+
+element end
+
+text / CDATA
+
+Optionally skip CDATA if skipcdata == true
+
+Return value probably means:
+
+true → entity successfully read
+
+false → no more entities / end of document
+
+Again: totally unimplemented.
+
+Why this feels incomplete (because it is)
+
+This looks like:
+
+A homework assignment
+
+A starter framework
+
+Or part of a larger project where you are expected to fill in the logic
+
+As written:
+
+It won’t compile
+
+It doesn’t parse anything
+
+It only shows design intent
+
+What you should understand so far
+
+This class is meant to be an event-based XML reader
+
+Expat will push events → your callbacks → stored in a queue
+
+ReadEntity() pulls events out one at a time
+
+SImplementation hides all the ugly details
+
+If you want, I can:
+
+Walk you through how Expat parsing actually works
+
+Help you design SXMLEntity
+
+Show a minimal working implementation
+
+Explain this in the context of your assignment or project
+
+Just tell me what level you’re aiming for 🙂
+
+### Changes 1
+Helped me understand the goal of and what the functions do in XMLReader
 
 ### Prompt 2
 in a makefile how do I make a generic rule for compilation

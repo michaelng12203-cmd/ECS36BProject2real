@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-01-29 01:11:55</td>
+            <td class="headerValue">2026-01-29 03:41:47</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -62,18 +62,18 @@
 <pre class="source">
 <span id="L1"><span class="lineNum">       1</span>              : #include &quot;StringDataSink.h&quot;</span>
 <span id="L2"><span class="lineNum">       2</span>              : </span>
-<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC">         214 : const std::string &amp;CStringDataSink::String() const{</span></span>
-<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">         214 :     return DString;</span></span>
+<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC">         361 : const std::string &amp;CStringDataSink::String() const{</span></span>
+<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">         361 :     return DString;</span></span>
 <span id="L5"><span class="lineNum">       5</span>              : }</span>
 <span id="L6"><span class="lineNum">       6</span>              : </span>
-<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">        6563 : bool CStringDataSink::Put(const char &amp;ch) noexcept{</span></span>
-<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">       13126 :     DString += std::string(1,ch);</span></span>
-<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">        6563 :     return true;</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">       11474 : bool CStringDataSink::Put(const char &amp;ch) noexcept{</span></span>
+<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">       22948 :     DString += std::string(1,ch);</span></span>
+<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">       11474 :     return true;</span></span>
 <span id="L10"><span class="lineNum">      10</span>              : }</span>
 <span id="L11"><span class="lineNum">      11</span>              : </span>
-<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">          14 : bool CStringDataSink::Write(const std::vector&lt;char&gt; &amp;buf) noexcept{</span></span>
-<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">          28 :     DString += std::string(buf.data(),buf.size());</span></span>
-<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">          14 :     return true;</span></span>
+<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">          20 : bool CStringDataSink::Write(const std::vector&lt;char&gt; &amp;buf) noexcept{</span></span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">          40 :     DString += std::string(buf.data(),buf.size());</span></span>
+<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">          20 :     return true;</span></span>
 <span id="L15"><span class="lineNum">      15</span>              : }</span>
         </pre>
               </td>

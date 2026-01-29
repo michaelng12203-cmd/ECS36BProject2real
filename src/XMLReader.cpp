@@ -1,7 +1,6 @@
 #include "XMLReader.h"
 #include <expat.h>
 #include <queue>
-#include <iostream>
 
 struct CXMLReader::SImplementation{
     std::shared_ptr<CDataSource> Source;
@@ -18,8 +17,6 @@ struct CXMLReader::SImplementation{
             entity.DAttributes.push_back({atts[i], atts[i+1]});
         }
         Implementation->EntityQueue.push(entity);
-                //printf("\n\n\n\nGRRRR\n\n\n");
-
     }
 
     static void EndElementHandler(void *userData, const XML_Char *name){
@@ -29,7 +26,6 @@ struct CXMLReader::SImplementation{
         entity.DNameData = name;
 
         Implementation->EntityQueue.push(entity);
-        //printf("\n\n\n\nGRRRR\n\n\n");
     }
     static void CharacterDataHandler(void *userData, const XML_Char *s, int len){
         SImplementation *Implementation = (SImplementation *)userData;
@@ -40,8 +36,6 @@ struct CXMLReader::SImplementation{
         entity.DNameData = char_data;
 
         Implementation->EntityQueue.push(entity);
-                //printf("\n\n\n\nGRRRR\n\n\n");
-
     }
 
     SImplementation(std::shared_ptr< CDataSource > src){
@@ -78,32 +72,24 @@ bool CXMLReader::ReadEntity(SXMLEntity &entity, bool skipcdata){
     }
     if(!DImplementation->EntityQueue.empty()){
         entity = DImplementation->EntityQueue.front();
-        while(entity.DType == SXMLEntity::EType::CharData && skipcdata == true){
-            DImplementation->EntityQueue.pop();
-            entity = DImplementation->EntityQueue.front();
-        }
         DImplementation->EntityQueue.pop();
+
+        if(entity.DType == SXMLEntity::EType::CharData && skipcdata == true){
+            entity = DImplementation->EntityQueue.front();
+            DImplementation->EntityQueue.pop();
+        }
         return true;
     }
     while(!DImplementation->Source->End()){
-        std::size_t count = 1024;
+        std::size_t count = 8192;
         std::vector<char> buf;
-        if(!DImplementation->Source->Read(buf,count)){
-            return false;
-        }
+        DImplementation->Source->Read(buf,count);
         XML_Parse(DImplementation->Parser, buf.data(), buf.size(), DImplementation->Source->End());
     }
         if(!DImplementation->EntityQueue.empty()){
         entity = DImplementation->EntityQueue.front();
-        while(entity.DType == SXMLEntity::EType::CharData && skipcdata == true){
-            DImplementation->EntityQueue.pop();
-            entity = DImplementation->EntityQueue.front();
-            if(CXMLReader::End()){
-                return false;
-            }
-        }
         DImplementation->EntityQueue.pop();
         return true;
-    }
+        }
     return false;
 }
