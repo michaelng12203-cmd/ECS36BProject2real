@@ -4,70 +4,57 @@
 #include <vector>
 #include <iostream>
 
-using std::cout;
-using std::endl;
+
 
 struct CSVGWriter::SImplementation{
-    std::shared_ptr< CDataSink > DSink;
-    svg_context_ptr DContext;
-
-    static svg_return_t WriteFunction(svg_user_context_ptr user, const char *text){
-        SImplementation *Implementation = (SImplementation *)user;
-        while(*text){
-            Implementation->DSink->Put(*text);
-            text++;
-        }
-        return SVG_OK;   
-    }
-
-
+std::shared_ptr< CDataSink > DSink; // Takes input from the Writer and creates a string to output
+    svg_context_ptr DContext; // The collection of data that holds the output of Writer functions such as Circle, Rectangle, etc.
+    
+    //Constructor for SImplementation, initializes DContext and DSink, width and height are used as parameters to call svg_create
     SImplementation(std::shared_ptr< CDataSink > sink, TSVGPixel width, TSVGPixel height){
-        DSink = sink;
-        DContext = svg_create(WriteFunction,nullptr,this,width,height);
+     
     }
-
+    //Destructor for SImplementation, calls svg_destroy to destroy context
     ~SImplementation(){
-        svg_destroy(DContext);
+       
     }
-
+    Takes the attrbutes and converts them into a string style format
     std::string CreateStyleString(const TAttributes &style){
 
-        return "";
     }
-
+    //Draws a circle using given parameters and style from CreateStyleString, returns true on success, false on failure
     bool Circle(const SSVGPoint &center, TSVGReal radius, const TAttributes &style){
-        svg_point_t Center{center.DX,center.DY};
-        std::string Style = CreateStyleString(style);
-        return svg_circle(DContext,&Center,radius,Style.c_str());
+        
     }
-
-    bool Rectange(const SSVGPoint &topleft, const SSVGSize &size, const TAttributes &style){
+    //Draws a rectangle using given parameters and style from CreateStyleString, returns true on success, false on failure
+    bool Rectangle(const SSVGPoint &topleft, const SSVGSize &size, const TAttributes &style){
 
     }
-
+    //Draws a line using given parameters and style from CreateStyleString, returns true on success, false on failure
     bool Line(const SSVGPoint &start, const SSVGPoint &end, const TAttributes &style){
 
     }
-
+    //Draws a path made up of multiple lines, using given parameters and style from CreateStyleString, returns true on success, false on failure
     bool SimplePath(const std::vector<SSVGPoint> points, const TAttributes &style){
 
     }
-
+    //Calls svg_group_begin to begin an SVG group using attrs from CreateStyleString, returns true on success, false on failure
     bool GroupBegin(const TAttributes &attrs){
 
     }
-
+    //Calls svg_group_end to end an SVG group, returns true on success, false on failure
     bool GroupEnd(){
 
     }
 
 };
 
+//Constructor for SVGWriter, sink is the output that writes the string
 CSVGWriter::CSVGWriter(std::shared_ptr< CDataSink > sink, TSVGPixel width, TSVGPixel height){
-    DImplementation = std::make_unique<SImplementation>(sink,width,height);
+
 }
 
-// This isn't used
+// Destructor for SVGWriter
 CSVGWriter::~CSVGWriter(){
 
 }

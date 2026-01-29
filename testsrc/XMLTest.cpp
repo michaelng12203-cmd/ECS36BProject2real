@@ -96,5 +96,17 @@ TEST(XMLReaderTest, SpecialCharacterTest){
 }
 
 TEST(XMLReaderTest, LongCharDataCrosses512Boundary){
+    std::string str = "<SupDude>iuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuwehiuhfhuf83hjfui32hfuih23if32f3ifheuuuuuuuuuuuuuuuuuuufiuhewfiuweh</SupDude>";
+    std::shared_ptr<CStringDataSource> Source = std::make_shared<CStringDataSource>(str);
 
+    {
+        CXMLReader Reader(Source);
+        SXMLEntity entity;
+        Reader.ReadEntity(entity, false);
+
+        SXMLEntity entity2;
+        Reader.ReadEntity(entity2, false);
+
+        EXPECT_EQ(entity2.DNameData.size(), 512);
+    }
 }
