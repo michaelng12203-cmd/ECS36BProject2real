@@ -4,7 +4,7 @@ class CBusSystem{
     public:
         using TStopID = uint64_t; //TStopID is now equivalent to uint64_t
 
-        inline static constexpr TStopID InvalidStopID = std::numeric_limits<TStopID>::max(); /*represents an invalid or missing stop ID*/
+        inline static constexpr TStopID InvalidStopID = std::numeric_limits<TStopID>::max(); /*represents an invalid stop ID*/
 
         //this struct contains the information that every SStop object will have
         struct SStop{
@@ -36,7 +36,7 @@ class CBusSystem{
 
         virtual std::size_t StopCount() const noexcept = 0;//gets stopcount
         virtual std::size_t RouteCount() const noexcept = 0;//gets routecount
-        virtual std::shared_ptr<SStop> StopByIndex(std::size_t index) const noexcept = 0;//gets stop at a certain index
+        virtual std::shared_ptr<SStop> StopByIndex(std::size_t index) const noexcept = 0;//gets a stop at a certain index
         virtual std::shared_ptr<SStop> StopByID(TStopID id) const noexcept = 0;//gets a stop at a certain ID
         virtual std::shared_ptr<SRoute> RouteByIndex(std::size_t index) const noexcept = 0;//gets a route by a certain diex
         virtual std::shared_ptr<SRoute> RouteByName(const std::string &name) const noexcept = 0;//gets a route by a name

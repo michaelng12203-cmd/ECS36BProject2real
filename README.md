@@ -2,7 +2,7 @@
 
 Student 1: Michael Nguyen (925426358)
 
-Student 2: Nicholas DO (924737022)
+Student 2: Nicholas Do (924737022)
 
 ## Project Status
 This the current status of the project: Fully completed and functional with full coverage (aside from a mysterious bracket)

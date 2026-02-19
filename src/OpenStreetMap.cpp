@@ -58,7 +58,6 @@ struct COpenStreetMap::SImplementation{
         }
         
         std::size_t AttributeCount() const noexcept override{
-            //SXMLEntity TempEntity;
             return DEntity.DAttributes.size();
         }
         
@@ -180,18 +179,23 @@ struct COpenStreetMap::SImplementation{
     std::unordered_map<TWayID,std::shared_ptr<SWay> > DWaysByID;
 
     bool ParseOSM(std::shared_ptr<CXMLReader> src){
+        //create tempEntity to read
         SXMLEntity TempEntity;
 
+        //if there is no <osm> tag then return false
         if(!FindStartTag(src,DOSMTag)){
             //cout<<"Start tag osm not found"<<endl;
             return false;
         }
 
+        //while there are still lines to read
         while(src->ReadEntity(TempEntity)){
 
+            //create the tables to store things in
             std::vector<TNodeID> WayNodeIDs;
             TAttributes TagAttributes;
              
+            //read the <node> tag and put in the ID
             if(TempEntity.DType == SXMLEntity::EType::StartElement && TempEntity.DNameData == DNodeTag){
                 auto NewNode = std::make_shared<SNode>(TempEntity);
                 DNodesByIndex.push_back(NewNode);
@@ -199,6 +203,7 @@ struct COpenStreetMap::SImplementation{
                 FindEndTag(src,DNodeTag);
             }
 
+            //read the <way> tag and give it properties such as ID and its own nodes
             if(TempEntity.DType == SXMLEntity::EType::StartElement && TempEntity.DNameData == DWayTag){
                 //cout<<std::stoull(TempEntity.AttributeValue(DWayIDAttr))<<endl;
                 auto WayID = std::stoull(TempEntity.AttributeValue(DWayIDAttr));

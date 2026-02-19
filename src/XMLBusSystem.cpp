@@ -26,6 +26,7 @@ struct CXMLBusSystem::SImplementation{
     const std::string DPathNodeTag = "node";
     const std::string DPathNodeIDAttr = "id";
 
+    //all SStop objects have access to whats in here
     struct SStop : public CBusSystem::SStop{
         TStopID DID;
         CStreetMap::TNodeID DNodeID;
@@ -56,7 +57,7 @@ struct CXMLBusSystem::SImplementation{
         }
     };
 
-
+    //all SRoute objects have access to this
     struct SRoute : public CBusSystem::SRoute{
         std::string DName;
         std::vector<TStopID> DGetStopID;
@@ -85,7 +86,7 @@ struct CXMLBusSystem::SImplementation{
         }
     };
 
-
+    //all SPath objects have access to this info
     struct SPath : public CBusSystem::SPath{
         CStreetMap::TNodeID DStartNodeID;
         CStreetMap::TNodeID DEndNodeID;
@@ -121,7 +122,7 @@ struct CXMLBusSystem::SImplementation{
     };
 
 
-
+    //find a certain start tag
     bool FindStartTag(std::shared_ptr< CXMLReader > xmlsource, const std::string &starttag){
         SXMLEntity TempEntity;
         while(xmlsource->ReadEntity(TempEntity,true)){
@@ -131,7 +132,7 @@ struct CXMLBusSystem::SImplementation{
         }
         return false;
     }
-
+    //find a certain end tag
     bool FindEndTag(std::shared_ptr< CXMLReader > xmlsource, const std::string &starttag){
         SXMLEntity TempEntity;
         while(xmlsource->ReadEntity(TempEntity,true)){
@@ -145,16 +146,16 @@ struct CXMLBusSystem::SImplementation{
     std::vector<std::shared_ptr<SStop> > DStopsByIndex;
     std::unordered_map<TStopID,std::shared_ptr<SStop> > DStopsByID;
 
+    //parses a single stop element
     void ParseStop(std::shared_ptr< CXMLReader > systemsource, const SXMLEntity &stop){
         TStopID StopID = std::stoull(stop.AttributeValue(DStopIDAttr));
         CStreetMap::TNodeID NodeID = std::stoull(stop.AttributeValue(DStopNodeAttr));
         auto NewStop = std::make_shared<SStop>(StopID, NodeID, stop.AttributeValue(DStopDescAttr));
         DStopsByIndex.push_back(NewStop);
-        //cout<<"DStopsByIndex "<<DStopsByIndex.size()<<endl;
         DStopsByID[StopID] = NewStop;
         FindEndTag(systemsource,DStopTag);
     }
-
+    //is in charge of parsing all stop elements
     void ParseStops(std::shared_ptr< CXMLReader > systemsource){
         SXMLEntity TempEntity;
 
@@ -172,6 +173,7 @@ struct CXMLBusSystem::SImplementation{
     std::vector<std::shared_ptr<SRoute>> DRouteByIndex;
     std::unordered_map<std::string, std::shared_ptr<SRoute> > DRouteByName;
 
+    //parses a single route element and its routestop elements
     void ParseRoute(std::shared_ptr< CXMLReader > systemsource, const SXMLEntity &name){
         SXMLEntity TempEntity;
         std::string routeName = std::string(name.AttributeValue(DRouteNameAttr));
@@ -193,6 +195,7 @@ struct CXMLBusSystem::SImplementation{
         DRouteByName[routeName] = newRoute;
     }
 
+    //in charge of parsing all route elements
     void ParseRoutes(std::shared_ptr< CXMLReader > systemsource){
         SXMLEntity TempEntity;
 
@@ -211,6 +214,7 @@ struct CXMLBusSystem::SImplementation{
 
     std::unordered_map<std::string, std::shared_ptr<SPath> > DPathByStopIDs;
 
+    //parses a single path, its source and destination, and its node IDs
     void ParsePath(std::shared_ptr< CXMLReader > systemsource, const SXMLEntity &points){
         SXMLEntity TempEntity;
         CStreetMap::TNodeID srcPath = std::stoull(points.AttributeValue(DPathSrcAttr));
@@ -232,7 +236,7 @@ struct CXMLBusSystem::SImplementation{
         DPathByStopIDs[key] = newPath;
     }   
     
-
+    //in charge of parsing all paths
     void ParsePaths(std::shared_ptr< CXMLReader > systemsource){
         SXMLEntity TempEntity;
 
@@ -247,7 +251,7 @@ struct CXMLBusSystem::SImplementation{
 
 
     }
-
+    //the main "control center", this function will call other functions to parse elements
     bool ParseBusSystem(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){
         SXMLEntity TempEntity;
         if(!FindStartTag(systemsource,DBusSystemTag)){
@@ -270,7 +274,7 @@ struct CXMLBusSystem::SImplementation{
 
         return true;
     }
-
+    //gives ParseBusSystem source to work with
     SImplementation(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){
         ParseBusSystem(systemsource, pathsource);
         
@@ -330,7 +334,7 @@ struct CXMLBusSystem::SImplementation{
 
 
 
-
+//creates DImplementation, allows access to functions in the struct above
 CXMLBusSystem::CXMLBusSystem(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){
     DImplementation = std::make_unique<SImplementation>(systemsource,pathsource);
 }
