@@ -145,9 +145,7 @@ TEST(XMLBusSystemTest, IncompleteTags){
     CXMLBusSystem BusSystem1(BusRouteReader1,BusPathReader1);
     EXPECT_EQ(BusSystem1.StopCount(), 0);
 
-
 }
-
 
 TEST(XMLBusSystemTest, InvalidIndex){
 
