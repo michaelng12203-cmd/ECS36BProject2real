@@ -78,7 +78,7 @@ struct CXMLBusSystem::SImplementation{
         }
         TStopID GetStopID(std::size_t index) const noexcept override{
             if(index >= DGetStopID.size()){
-                return NULL;
+                return 0;
             }
             return DGetStopID[index];
 
@@ -113,7 +113,7 @@ struct CXMLBusSystem::SImplementation{
         }
         CStreetMap::TNodeID GetNodeID(std::size_t index) const noexcept override{
             if(index >= DGetNodeID.size()){
-                return NULL;
+                return 0;
             }
             return DGetNodeID[index];
 
@@ -248,29 +248,27 @@ struct CXMLBusSystem::SImplementation{
 
     }
 
-    void ParseBusSystem(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){
+    bool ParseBusSystem(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){
         SXMLEntity TempEntity;
         if(!FindStartTag(systemsource,DBusSystemTag)){
-            cout<<"Start tag bussystem not found"<<endl;
-            return;
+            return false;
         }
         if(!FindStartTag(systemsource,DStopsTag)){
-            cout<<"Start tag stop not found"<<endl;
-            return;
+            return false;
         }
         ParseStops(systemsource);
 
         if(!FindStartTag(systemsource,DRoutesTag)){
-            cout<<"Start tag route not found"<<endl;
-            return;
+            return false;
         }
         ParseRoutes(systemsource);
 
         if(!FindStartTag(pathsource,DPathsTag)){
-            cout<<"Start tag path not found"<<endl;
-            return;
+            return false;
         }
         ParsePaths(pathsource);
+
+        return true;
     }
 
     SImplementation(std::shared_ptr< CXMLReader > systemsource, std::shared_ptr< CXMLReader > pathsource){

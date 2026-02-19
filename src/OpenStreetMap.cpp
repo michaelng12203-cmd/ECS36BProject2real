@@ -291,6 +291,7 @@ struct COpenStreetMap::SImplementation{
                 FindEndTag(src,DWayTag);
             }
         }*/
+       return true;
     }
 
     SImplementation(std::shared_ptr<CXMLReader> src){

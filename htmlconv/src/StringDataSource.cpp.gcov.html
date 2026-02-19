@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-02-18 22:54:10</td>
+            <td class="headerValue">2026-02-19 04:31:49</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -62,21 +62,21 @@
 <pre class="source">
 <span id="L1"><span class="lineNum">       1</span>              : #include &quot;StringDataSource.h&quot;</span>
 <span id="L2"><span class="lineNum">       2</span>              : </span>
-<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC">          21 : CStringDataSource::CStringDataSource(const std::string &amp;str) : DString(str), DIndex(0){</span></span>
+<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC">          37 : CStringDataSource::CStringDataSource(const std::string &amp;str) : DString(str), DIndex(0){</span></span>
 <span id="L4"><span class="lineNum">       4</span>              : </span>
-<span id="L5"><span class="lineNum">       5</span> <span class="tlaGNC">          21 : }</span></span>
+<span id="L5"><span class="lineNum">       5</span> <span class="tlaGNC">          37 : }</span></span>
 <span id="L6"><span class="lineNum">       6</span>              : </span>
-<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">          39 : bool CStringDataSource::End() const noexcept{</span></span>
-<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">          39 :     return DIndex &gt;= DString.length();</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">          86 : bool CStringDataSource::End() const noexcept{</span></span>
+<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">          86 :     return DIndex &gt;= DString.length();</span></span>
 <span id="L9"><span class="lineNum">       9</span>              : }</span>
 <span id="L10"><span class="lineNum">      10</span>              : </span>
-<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">        1496 : bool CStringDataSource::Get(char &amp;ch) noexcept{</span></span>
-<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">        1496 :     if(DIndex &lt; DString.length()){</span></span>
-<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">        1484 :         ch = DString[DIndex];</span></span>
-<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">        1484 :         DIndex++;</span></span>
-<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">        1484 :         return true;</span></span>
+<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">        5044 : bool CStringDataSource::Get(char &amp;ch) noexcept{</span></span>
+<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">        5044 :     if(DIndex &lt; DString.length()){</span></span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">        5022 :         ch = DString[DIndex];</span></span>
+<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">        5022 :         DIndex++;</span></span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">        5022 :         return true;</span></span>
 <span id="L16"><span class="lineNum">      16</span>              :     }</span>
-<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          12 :     return false;</span></span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          22 :     return false;</span></span>
 <span id="L18"><span class="lineNum">      18</span>              : }</span>
 <span id="L19"><span class="lineNum">      19</span>              : </span>
 <span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">          11 : bool CStringDataSource::Peek(char &amp;ch) noexcept{</span></span>
@@ -87,18 +87,18 @@
 <span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           2 :     return false;</span></span>
 <span id="L26"><span class="lineNum">      26</span>              : }</span>
 <span id="L27"><span class="lineNum">      27</span>              : </span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          12 : bool CStringDataSource::Read(std::vector&lt;char&gt; &amp;buf, std::size_t count) noexcept{</span></span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          12 :     buf.clear();</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">        1494 :     while(buf.size() &lt; count){</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          22 : bool CStringDataSource::Read(std::vector&lt;char&gt; &amp;buf, std::size_t count) noexcept{</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          22 :     buf.clear();</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">        5042 :     while(buf.size() &lt; count){</span></span>
 <span id="L31"><span class="lineNum">      31</span>              :         char TempChar;</span>
-<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">        1493 :         if(Get(TempChar)){</span></span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">        1482 :             buf.push_back(TempChar);</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">        5041 :         if(Get(TempChar)){</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">        5020 :             buf.push_back(TempChar);</span></span>
 <span id="L34"><span class="lineNum">      34</span>              :         }</span>
 <span id="L35"><span class="lineNum">      35</span>              :         else{</span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          11 :             break;</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          21 :             break;</span></span>
 <span id="L37"><span class="lineNum">      37</span>              :         }</span>
 <span id="L38"><span class="lineNum">      38</span>              :     }</span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          12 :     return !buf.empty();</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          22 :     return !buf.empty();</span></span>
 <span id="L40"><span class="lineNum">      40</span>              : }</span>
         </pre>
               </td>
