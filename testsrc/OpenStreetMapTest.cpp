@@ -6,6 +6,7 @@ TEST(OpenStreetMapTest, SimpleTest){
     auto OSMSource = std::make_shared<CStringDataSource>(  "<osm version=\"0.6\" generator=\"osmconvert 0.8.5\">\n"
 	                                                            "  <node id=\"1\" lat=\"38.5\" lon=\"-121.7\"/>\n"
 	                                                            "  <node id=\"2\" lat=\"38.5\" lon=\"-121.8\"/>\n"
+                                                                
                                                                 "  <way id=\"1000\">\n"
                                                                 "    <nd ref=\"1\"/>\n"
 		                                                        "    <nd ref=\"2\"/>\n"

@@ -24,7 +24,7 @@ LDFLAGS				= -lexpat
 
 TEST_CFLAGS			= $(CFLAGS) -O0 -g --coverage
 TEST_CPPFLAGS		= $(CPPFLAGS) -fno-inline
-TEST_LDFLAGS		= $(LDFLAGS) -lgtest -lgtest_main -lpthread
+TEST_LDFLAGS		= $(LDFLAGS) -lgtest_main -lgtest  -lpthread
 
 # Define the object files
 TEST_SVG_OBJ		= $(TESTOBJ_DIR)/svg.o
@@ -75,7 +75,7 @@ CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
 
-all: directories run_svgtest run_srctest run_sinktest run_xmltest run_writertest run_osmtest run_xmlbstest  gen_html
+all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_xmlbstest run_osmtest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
