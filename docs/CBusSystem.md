@@ -1,4 +1,4 @@
-/*Every member function in this class is a pure virtual function. They don't have implementation, that will be created and overriden in subclasses.*/
+/*Every member function in this class is a pure virtual function. They don't have implementation, that will be created and overridden in subclasses.*/
 
 class CBusSystem{
     public:
@@ -40,5 +40,5 @@ class CBusSystem{
         virtual std::shared_ptr<SStop> StopByID(TStopID id) const noexcept = 0;//gets a stop at a certain ID
         virtual std::shared_ptr<SRoute> RouteByIndex(std::size_t index) const noexcept = 0;//gets a route by a certain diex
         virtual std::shared_ptr<SRoute> RouteByName(const std::string &name) const noexcept = 0;//gets a route by a name
-        virtual std::shared_ptr<SPath> PathByStopIDs(TStopID start, TStopID end) const noexcept = 0;/*gets a path by certain //start and end IDs*/
+        virtual std::shared_ptr<SPath> PathByStopIDs(TStopID start, TStopID end) const noexcept = 0;/*gets a path by certain start and end IDs*/
 };

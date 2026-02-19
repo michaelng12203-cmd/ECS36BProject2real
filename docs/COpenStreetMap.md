@@ -1,0 +1,1 @@
+/*many of the structs and functions in XMLBusSystem.cpp were explained in CBusSystem.md, so here I will document the functions I used.*/
