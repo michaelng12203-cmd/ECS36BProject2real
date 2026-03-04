@@ -33,6 +33,7 @@ class CSVGWriter{
         bool Rectangle(const SSVGPoint &topleft, const SSVGSize &size, const TAttributes &style);
         bool Line(const SSVGPoint &start, const SSVGPoint &end, const TAttributes &style);
         bool SimplePath(const std::vector<SSVGPoint> points, const TAttributes &style);
+        bool Text(const SSVGPoint &anchor, const std::string &text, const TAttributes &style);
         bool GroupBegin(const TAttributes &attrs);
         bool GroupEnd();
 

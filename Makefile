@@ -55,6 +55,27 @@ TEST_OSM_OBJ			= $(TESTOBJ_DIR)/OpenStreetMap.o
 TEST_OSM_TEST_OBJ		= $(TESTOBJ_DIR)/OpenStreetMapTest.o
 TEST_OSM_OBJ_FILES		= $(TEST_STRSRC_OBJ) $(TEST_XML_OBJ) $(TEST_OSM_OBJ) $(TEST_OSM_TEST_OBJ)
 
+TEST_MOCK_BS_OBJ		= $(TESTOBJ_DIR)/MockBusSystem.o
+TEST_MOCK_SM_OBJ		= $(TESTOBJ_DIR)/MockStreetMap.o
+
+TEST_HTMLTPW_OBJ		= $(TESTOBJ_DIR)/HTMLTripPlanWriter.o
+TEST_SVGTPW_OBJ			= $(TESTOBJ_DIR)/SVGTripPlanWriter.o
+TEST_TEXTTPW_OBJ		= $(TESTOBJ_DIR)/TextTripPlanWriter.o
+
+TEST_TP_OBJ				= $(TESTOBJ_DIR)/TripPlanner.o
+TEST_TPCL_OBJ			= $(TESTOBJ_DIR)/TripPlannerCommandLine.o
+TEST_TPCL_TEST_OBJ		= $(TESTOBJ_DIR)/TripPlannerCommandLineTest.o
+TEST_TPCL_OBJ_FILES		= $(TEST_STRSRC_OBJ) \
+							$(TEST_STRSINK_OBJ) \
+							$(TEST_MOCK_BS_OBJ) \
+							$(TEST_MOCK_SM_OBJ) \
+							$(TEST_HTMLTPW_OBJ)	\
+							$(TEST_SVGLTPW_OBJ)	\
+							$(TEST_TEXTTPW_OBJ)	\
+							$(TEST_TP_OBJ)	\
+							$(TEST_TPCL_OBJ) \
+							$(TEST_TPCL_TEST_OBJ)
+
 MAIN_OBJ			= $(OBJ_DIR)/main.o
 SVG_OBJ			= $(OBJ_DIR)/svg.o
 LIBSVG 			= $(LIB_DIR)/libsvg.a
@@ -68,6 +89,8 @@ TEST_WRITER_TARGET 	= $(TESTBIN_DIR)/testsvgwriter
 TEST_XML_TARGET 		= $(TESTBIN_DIR)/testxml
 TEST_XMLBS_TARGET		= $(TESTBIN_DIR)/testxmlbs
 TEST_OSM_TARGET		= $(TESTBIN_DIR)/testosm
+TEST_TPCL_TARGET		= $(TESTBIN_DIR)/testtpcl
+
 
 TEST_TARGET_MAIN		= $(BIN_DIR)/main.out
 CHECKMARK_OUTPUT	= checkmark.svg
@@ -75,7 +98,7 @@ CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
 
-all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_xmlbstest run_osmtest gen_html
+all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_tpcltest run_xmlbstest run_osmtest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
@@ -91,6 +114,9 @@ run_xmltest: $(TEST_XML_TARGET)
 
 run_writertest: $(TEST_WRITER_TARGET)
 	$(TEST_WRITER_TARGET)
+
+run_tpcltest: $(TEST_TPCL_TARGET)
+	$(TEST_TPCL_TARGET)
 
 run_osmtest: $(TEST_OSM_TARGET)
 	$(TEST_OSM_TARGET)
@@ -126,6 +152,9 @@ $(TEST_WRITER_TARGET): $(TEST_WRITER_OBJ_FILES)
 
 $(TEST_XMLBS_TARGET): $(TEST_XMLBS_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_XMLBS_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_XMLBS_TARGET)
+
+$(TEST_TPCL_TARGET): $(TEST_TPCL_OBJ_FILES)
+	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_TPCL_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_TPCL_TARGET)
 
 $(TEST_OSM_TARGET): $(TEST_OSM_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_OSM_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_OSM_TARGET)
