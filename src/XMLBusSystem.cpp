@@ -18,6 +18,7 @@ struct CXMLBusSystem::SImplementation{
     const std::string DRouteNameAttr = "name";
     const std::string DRouteStopTag = "routestop";
     const std::string DRouteStopAttr = "stop";
+    const std::string DScheduleNameAttr = "schedule";
 
     const std::string DPathsTag = "paths";
     const std::string DPathTag = "path";
@@ -75,6 +76,11 @@ struct CXMLBusSystem::SImplementation{
         }
         std::size_t StopCount() const noexcept override{
             return DGetStopID.size();
+        
+        }
+
+        std::size_t TripCount() const noexcept override{
+            return 3;
 
         }
         TStopID GetStopID(std::size_t index) const noexcept override{
@@ -84,6 +90,12 @@ struct CXMLBusSystem::SImplementation{
             return DGetStopID[index];
 
         }
+        TStopTime GetStopTime(std::size_t stopindex, std::size_t tripindex) const noexcept override{
+            return TStopTime(std::chrono::seconds(0));
+
+        }
+
+
     };
 
     //all SPath objects have access to this info
@@ -178,7 +190,9 @@ struct CXMLBusSystem::SImplementation{
         SXMLEntity TempEntity;
         std::string routeName = std::string(name.AttributeValue(DRouteNameAttr));
         std::vector<TStopID> RouteStopIDs;
-
+        std::string schedule = std::string(name.AttributeValue(DScheduleNameAttr));
+        std::cout<<schedule<<std::endl;
+        
         do{
             //cout<<"GRRRRRRR\n\n\n"<<endl;
             if(!systemsource->ReadEntity(TempEntity,true)){

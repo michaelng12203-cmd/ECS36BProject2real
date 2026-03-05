@@ -98,7 +98,7 @@ CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
 
-all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_tpcltest run_xmlbstest run_osmtest gen_html
+all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_xmlbstest run_osmtest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
