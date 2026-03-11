@@ -171,3 +171,27 @@ svg_return_t svg_group_end(svg_context_ptr context){
     
     return context->write_fn(context->user, "</g>");
 }
+
+svg_return_t svg_text(svg_context_ptr context, const svg_point_t *position, const char *text, const char *style){
+
+    if(style == NULL){
+        return SVG_ERR_IO;
+    }
+    if(context == NULL){
+        return SVG_ERR_NULL;
+    }
+    if(position == NULL){
+        return SVG_ERR_NULL;
+    }
+    if(text == NULL){
+        return SVG_ERR_INVALID_ARG;
+    }
+
+    int size = snprintf(NULL, 0, "<text x=\"%lf\" y=\"%lf\" style=\"%s\">%s</text>", position->x, position->y, style, text);
+    char *buffer = (char *)malloc(size + 1);
+    snprintf(buffer, size, "<text x=\"%lf\" y=\"%lf\" style=\"%s\">%s</text>", position->x, position->y, style, text);
+    svg_return_t svg_text = context->write_fn(context->user, buffer);
+    free(buffer);
+    context->write_fn(context->user, ">\n");
+    return svg_text;
+}

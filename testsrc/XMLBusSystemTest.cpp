@@ -9,14 +9,14 @@ TEST(XMLBusSystemTest, SimpleTest){
                                                                 "   <stop id=\"2\" node=\"311\" description=\"second\"/>\n"
                                                                 "</stops>\n"
                                                                 "<routes>\n"
-                                                                "<route name=\"A\">\n"
-                                                                "<routestop stop=\"22061\" />\n"
-                                                                "<routestop stop=\"92542\" />\n"
+                                                                "<route name=\"A\" schedule=\"07:00 AM,07:30 AM,08:00 AM,08:30 AM,09:00 AM,09:30 AM,10:00 AM,10:30 AM,11:00 AM,11:30 AM,12:10 PM,12:40 PM,01:10 PM,01:40 PM,02:10 PM,02:40 PM,03:10 PM,03:40 PM,04:10 PM,04:40 PM,05:10 PM,05:40 PM,06:10 PM,06:40 PM,07:10 PM,07:40 PM,08:10 PM,08:40 PM,09:10 PM,09:40 PM,10:10 PM\">\n"
+                                                                "<routestop stop=\"22061\" delta=\"+6.0\"/>\n"
+                                                                "<routestop stop=\"92542\" delta=\"+7.0\"/>\n"
                                                                 "</route>\n"
-                                                                "<route name=\"B\">\n"
-                                                                "<routestop stop=\"60683\" />\n"
-                                                                "<routestop stop=\"10593\" />\n"
-                                                                "<routestop stop=\"11115\" />\n"
+                                                                "<route name=\"B\" schedule=\"07:00 AM,07:30 AM,08:00 AM,08:30 AM,09:00 AM,09:30 AM,10:00 AM,10:30 AM,11:00 AM,11:30 AM,12:10 PM,12:40 PM,01:10 PM,01:40 PM,02:10 PM,02:40 PM,03:10 PM,03:40 PM,04:10 PM,04:40 PM,05:10 PM,05:40 PM,06:10 PM,06:40 PM,07:10 PM,07:40 PM,08:10 PM,08:40 PM,09:10 PM,09:40 PM,10:10 PM\">\n"
+                                                                "<routestop stop=\"60683\" delta=\"+8.0\"/>\n"
+                                                                "<routestop stop=\"10593\" delta=\"+9.0\"/>\n"
+                                                                "<routestop stop=\"11115\" delta=\"+10.0\"/>\n"
                                                                 "</route>\n"
                                                                 "</routes>\n"
 "                                                               </bussystem>");
@@ -49,6 +49,16 @@ TEST(XMLBusSystemTest, SimpleTest){
     EXPECT_NE(BusSystem.RouteByIndex(0),nullptr);
     EXPECT_NE(BusSystem.RouteByIndex(1),nullptr);
     auto RouteObj = BusSystem.RouteByName("A");
+
+    EXPECT_EQ(RouteObj->TripCount(), 31);
+    auto StopTime = std::chrono::hours{8} + std::chrono::minutes{37};
+    EXPECT_EQ(RouteObj->GetStopTime(1, 3).to_duration(), StopTime);
+    auto StopTime2 = std::chrono::hours{0} + std::chrono::minutes{0};
+    EXPECT_EQ(RouteObj->GetStopTime(100, 0).to_duration(), StopTime2);
+    EXPECT_EQ(RouteObj->GetStopTime(0, 100).to_duration(), StopTime2);
+    auto StopTime3 = std::chrono::hours{22} + std::chrono::minutes{17};
+    EXPECT_EQ(RouteObj->GetStopTime(1, 30).to_duration(), StopTime3);
+
     ASSERT_NE(RouteObj,nullptr);
     EXPECT_EQ(RouteObj->Name(),"A");
     EXPECT_EQ(RouteObj->StopCount(), 2);
@@ -119,7 +129,7 @@ TEST(XMLBusSystemTest, InvalidTags){
                                                                "</stops>\n" 
                                                                 "<routes>\n"  
                                                                 "<route name=\"A\">\n"
-                                                                "<routestop stop=\"22061\" />\n"
+                                                                "<routestop stop=\"22061\" delta=\"+14.0\"/>\n"
                                                                 "</route>\n"
                                                                 "</routes>\n"                                                                          
                                                             "</bussystem>");
@@ -156,13 +166,13 @@ TEST(XMLBusSystemTest, InvalidIndex){
                                                                 "</stops>\n"
                                                                 "<routes>\n"
                                                                 "<route name=\"A\">\n"
-                                                                "<routestop stop=\"22061\" />\n"
-                                                                "<routestop stop=\"92542\" />\n"
+                                                                "<routestop stop=\"22061\" delta=\"+5.0\"/>\n"
+                                                                "<routestop stop=\"92542\" delta=\"+4.0\"/>\n"
                                                                 "</route>\n"
                                                                 "<route name=\"B\">\n"
-                                                                "<routestop stop=\"60683\" />\n"
-                                                                "<routestop stop=\"10593\" />\n"
-                                                                "<routestop stop=\"11115\" />\n"
+                                                                "<routestop stop=\"60683\" delta=\"+3.0\"/>\n"
+                                                                "<routestop stop=\"10593\" delta=\"+2.0\"/>\n"
+                                                                "<routestop stop=\"11115\" delta=\"+1.0\"/>\n"
                                                                 "</route>\n"
                                                                 "</routes>\n"
 "                                                               </bussystem>");
@@ -225,28 +235,28 @@ TEST(XMLBusSystemTest, LargeData){
     "</stops>\n"
     "<routes>\n"
         "<route name=\"A\">\n"
-            "<routestop stop=\"22258\" />\n"
+            "<routestop stop=\"22258\" delta=\"+1.0\"/>\n"
         "</route>\n"
         "<route name=\"B\">\n"
-            "<routestop stop=\"22274\" />\n"
-            "<routestop stop=\"22230\" />\n"
-            "<routestop stop=\"22185\" />\n"
-            "<routestop stop=\"22189\" />\n"
-            "<routestop stop=\"22188\" />\n"
-            "<routestop stop=\"22186\" />\n"
-            "<routestop stop=\"22191\" />\n"
-            "<routestop stop=\"22193\" />\n"
-            "<routestop stop=\"22194\" />\n"
-            "<routestop stop=\"22195\" />\n"
+            "<routestop stop=\"22274\" delta=\"+2.0\"/>\n"
+            "<routestop stop=\"22230\" delta=\"+3.0\"/>\n"
+            "<routestop stop=\"22185\" delta=\"+4.0\"/>\n"
+            "<routestop stop=\"22189\" delta=\"+5.0\"/>\n"
+            "<routestop stop=\"22188\" delta=\"+6.0\"/>\n"
+            "<routestop stop=\"22186\" delta=\"+7.0\"/>\n"
+            "<routestop stop=\"22191\" delta=\"+8.0\"/>\n"
+            "<routestop stop=\"22193\" delta=\"+9.0\"/>\n"
+            "<routestop stop=\"22194\" delta=\"+10.0\"/>\n"
+            "<routestop stop=\"22195\" delta=\"+11.0\"/>\n"
         "</route>\n"
         "<route name=\"C\">\n"
-            "<routestop stop=\"22256\" />\n"
-            "<routestop stop=\"22239\" />\n"
-            "<routestop stop=\"22361\" />\n"
-            "<routestop stop=\"22225\" />\n"
-            "<routestop stop=\"22221\" />\n"
-            "<routestop stop=\"22226390876391066\" />\n"
-            "<routestop stop=\"22227\" />\n"
+            "<routestop stop=\"22256\" delta=\"+12.0\"/>\n"
+            "<routestop stop=\"22239\" delta=\"+13.0\"/>\n"
+            "<routestop stop=\"22361\" delta=\"+14.0\"/>\n"
+            "<routestop stop=\"22225\" delta=\"+15.0\"/>\n"
+            "<routestop stop=\"22221\" delta=\"+19.0\"/>\n"
+            "<routestop stop=\"22226390876391066\" delta=\"+20.0\"/>\n"
+            "<routestop stop=\"22227\" delta=\"+41.0\"/>\n"
         "</route>\n"
     "</routes>\n"
 "</bussystem>\n");

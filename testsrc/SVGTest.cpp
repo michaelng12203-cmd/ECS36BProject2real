@@ -145,7 +145,21 @@ TEST_F(SVGTest, Grouping){
 
 }
 
+TEST_F(SVGTest, Text){
 
+    svg_point_t position = {11,10};
+    svg_text(DContext, &position, "Ore Wa Striker Da", "fill:none; stroke:blue; stroke-width:1");
+
+    std::string Allout = DOutput.JoinOutput();
+
+    std::cout << Allout << std::endl;
+    EXPECT_NE(Allout.find("<text"), std::string::npos);
+    EXPECT_NE(Allout.find("x=\"11.000000\""), std::string::npos);
+    EXPECT_NE(Allout.find("y=\"10.000000\""), std::string::npos);
+    EXPECT_NE(Allout.find("style=\"fill:none; stroke:blue; stroke-width:1\""), std::string::npos);
+    EXPECT_NE(Allout.find("</text>"), std::string::npos);
+    EXPECT_NE(Allout.find("Ore Wa Striker Da"), std::string::npos);
+}
 
 
 
