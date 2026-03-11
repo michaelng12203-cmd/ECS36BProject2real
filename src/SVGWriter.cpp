@@ -75,6 +75,12 @@ struct CSVGWriter::SImplementation{
         }
     }
 
+    bool Text(const SSVGPoint &anchor, const std::string &text, const TAttributes &style){
+        svg_point_t Anchor{anchor.DX,anchor.DY};
+        std::string Style = CreateStyleString(style);
+        return svg_text(DContext, &Anchor, text.c_str(), Style.c_str());
+    }
+
     bool GroupBegin(const TAttributes &attrs){
         std::string Attrs = CreateStyleString(attrs);
         return svg_group_begin(DContext, Attrs.c_str());
@@ -110,6 +116,11 @@ bool CSVGWriter::Line(const SSVGPoint &start, const SSVGPoint &end, const TAttri
 bool CSVGWriter::SimplePath(const std::vector<SSVGPoint> points, const TAttributes &style){
     return DImplementation->SimplePath(points, style);
 }
+
+bool CSVGWriter::Text(const SSVGPoint &anchor, const std::string &text, const TAttributes &style){
+    return DImplementation->Text(anchor, text, style);
+}
+
 
 bool CSVGWriter::GroupBegin(const TAttributes &attrs){
     return DImplementation->GroupBegin(attrs);

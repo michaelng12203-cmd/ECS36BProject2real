@@ -100,6 +100,31 @@ TEST(SVGWriterTest, SimplePathTest){
     EXPECT_NE(Sink->String().find("y2=\"70.000000\""), std::string::npos);
 }
 
+TEST(SVGWriterTest, TextTest){
+
+std::shared_ptr<CStringDataSink> Sink = std::make_shared<CStringDataSink>();
+    TAttributes attrs = {{"fill", "yellow"}, {"stroke", "green"}, {"stroke-width", "3"}};
+    SSVGPoint position = {1,4};
+    std::string text = "Horimiya and Your Lie in April";
+    {
+        CSVGWriter Writer(Sink,100,100);
+        Writer.Text(position, text, attrs);
+    }
+    
+    EXPECT_NE(Sink->String().find("<text"), std::string::npos);
+    EXPECT_NE(Sink->String().find("x=\"1.000000\""), std::string::npos);
+    EXPECT_NE(Sink->String().find("y=\"4.000000\""), std::string::npos);
+    EXPECT_NE(Sink->String().find("style=\"fill:yellow;"), std::string::npos);
+    EXPECT_NE(Sink->String().find("stroke:green;"), std::string::npos);
+    EXPECT_NE(Sink->String().find("stroke-width:3"), std::string::npos);
+    EXPECT_NE(Sink->String().find("Horimiya and Your Lie in April"), std::string::npos);
+    EXPECT_NE(Sink->String().find("</text>"), std::string::npos);
+
+}
+
+
+
+
 TEST(SVGWriterTest, GroupTest){
 
     std::shared_ptr<CStringDataSink> Sink = std::make_shared<CStringDataSink>();
