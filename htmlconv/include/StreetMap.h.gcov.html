@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-03-11 22:46:53</td>
+            <td class="headerValue">2026-03-11 23:53:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryLo">62.5&nbsp;%</td>
@@ -78,9 +78,9 @@
 <span id="L16"><span class="lineNum">      16</span>              :             double DLongitude;  </span>
 <span id="L17"><span class="lineNum">      17</span>              :             SLocation() = default;</span>
 <span id="L18"><span class="lineNum">      18</span>              :             SLocation(const CStreetMap::SLocation &amp;loc) = default;</span>
-<span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">          15 :             SLocation(double latitude, double longitude): DLatitude(latitude), DLongitude(longitude){};</span></span>
-<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">           3 :             bool operator==(const SLocation &amp;loc) const{</span></span>
-<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">           3 :                 return DLatitude == loc.DLatitude &amp;&amp; DLongitude == loc.DLongitude;</span></span>
+<span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">          38 :             SLocation(double latitude, double longitude): DLatitude(latitude), DLongitude(longitude){};</span></span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">          12 :             bool operator==(const SLocation &amp;loc) const{</span></span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">          12 :                 return DLatitude == loc.DLatitude &amp;&amp; DLongitude == loc.DLongitude;</span></span>
 <span id="L22"><span class="lineNum">      22</span>              :             };</span>
 <span id="L23"><span class="lineNum">      23</span>              :         };</span>
 <span id="L24"><span class="lineNum">      24</span>              : </span>

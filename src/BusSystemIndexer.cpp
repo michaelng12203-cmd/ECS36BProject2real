@@ -104,7 +104,6 @@ struct SRouteIndexer : public CBusSystemIndexer::SRouteIndexer{
             return l->Name() < r->Name();
         });
 
-
     }
 
     ~SImplementation(){
@@ -172,13 +171,23 @@ struct SRouteIndexer : public CBusSystemIndexer::SRouteIndexer{
             return false;
         }
 
+        bool foundStop = false;
+
         for (size_t i = 0; i < Route1->StopCount(); i++){
             for (size_t j = 0; j < Route2->StopCount(); j++){
                 if (Route1->GetStopID(i) == Route2->GetStopID(j)){
                     stops.insert(Route1->GetStopID(i));
+                    foundStop = true;
                 }
             }
         }
+        
+        if (foundStop){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 };
 

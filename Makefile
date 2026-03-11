@@ -24,7 +24,7 @@ LDFLAGS				= -lexpat
 
 TEST_CFLAGS			= $(CFLAGS) -O0 -g --coverage
 TEST_CPPFLAGS		= $(CPPFLAGS) -fno-inline
-TEST_LDFLAGS		= $(LDFLAGS) -lgtest_main -lgtest  -lpthread
+TEST_LDFLAGS		= $(LDFLAGS) -lgtest_main -lgtest -lgmock -lpthread
 
 # Define the object files
 TEST_SVG_OBJ		= $(TESTOBJ_DIR)/svg.o
@@ -58,9 +58,22 @@ TEST_OSM_OBJ_FILES		= $(TEST_STRSRC_OBJ) $(TEST_XML_OBJ) $(TEST_OSM_OBJ) $(TEST_
 TEST_MOCK_BS_OBJ		= $(TESTOBJ_DIR)/MockBusSystem.o
 TEST_MOCK_SM_OBJ		= $(TESTOBJ_DIR)/MockStreetMap.o
 
+TEST_BSIDX_OBJ			= $(TESTOBJ_DIR)/BusSystemIndexer.o
+TEST_BSIDX_TEST_OBJ		= $(TESTOBJ_DIR)/BusSystemIndexerTest.o
+TEST_BSIDX_OBJ_FILES	= $(TEST_STRSRC_OBJ) $(TEST_MOCK_BS_OBJ) $(TEST_BSIDX_OBJ) $(TEST_BSIDX_TEST_OBJ)
+
+TEST_SMIDX_OBJ			= $(TESTOBJ_DIR)/StreetMapIndexer.o
+TEST_SMIDX_TEST_OBJ		= $(TESTOBJ_DIR)/StreetMapIndexerTest.o
+TEST_SMIDX_OBJ_FILES	= $(TEST_STRSRC_OBJ) $(TEST_MOCK_SM_OBJ) $(TEST_SMIDX_OBJ) $(TEST_SMIDX_TEST_OBJ)
+
 TEST_HTMLTPW_OBJ		= $(TESTOBJ_DIR)/HTMLTripPlanWriter.o
 TEST_SVGTPW_OBJ			= $(TESTOBJ_DIR)/SVGTripPlanWriter.o
 TEST_TEXTTPW_OBJ		= $(TESTOBJ_DIR)/TextTripPlanWriter.o
+
+TEST_GEOUTIL_OBJ		= $(TESTOBJ_DIR)/GeographicUtils.o
+TEST_GEOUTIL_TEST_OBJ	= $(TESTOBJ_DIR)/GeographicUtilsTest.o
+TEST_GEOUTIL_OBJ_FILES	= $(TEST_GEOUTIL_OBJ) $(TEST_GEOUTIL_TEST_OBJ)
+
 
 TEST_TP_OBJ				= $(TESTOBJ_DIR)/TripPlanner.o
 TEST_TPCL_OBJ			= $(TESTOBJ_DIR)/TripPlannerCommandLine.o
@@ -84,21 +97,23 @@ LIBSVG 			= $(LIB_DIR)/libsvg.a
 # Define the targets
 TEST_SVG_TARGET			= $(TESTBIN_DIR)/testsvg
 TEST_STRSINK_TARGET 	= $(TESTBIN_DIR)/teststrdatasink
-TEST_STRSRC_TARGET 	= $(TESTBIN_DIR)/teststrdatasource
-TEST_WRITER_TARGET 	= $(TESTBIN_DIR)/testsvgwriter
+TEST_STRSRC_TARGET 		= $(TESTBIN_DIR)/teststrdatasource
+TEST_WRITER_TARGET 		= $(TESTBIN_DIR)/testsvgwriter
 TEST_XML_TARGET 		= $(TESTBIN_DIR)/testxml
 TEST_XMLBS_TARGET		= $(TESTBIN_DIR)/testxmlbs
-TEST_OSM_TARGET		= $(TESTBIN_DIR)/testosm
-TEST_TPCL_TARGET		= $(TESTBIN_DIR)/testtpcl
+TEST_OSM_TARGET			= $(TESTBIN_DIR)/testosm
 
+TEST_TPCL_TARGET		= $(TESTBIN_DIR)/testtpcl
+TEST_BSIDX_TARGET		= $(TESTBIN_DIR)/testbsidx
+TEST_SMIDX_TARGET		= $(TESTBIN_DIR)/testsmidx
+TEST_GEOUTIL_TARGET		=$(TESTBIN_DIR)/testgeographicutils
 
 TEST_TARGET_MAIN		= $(BIN_DIR)/main.out
 CHECKMARK_OUTPUT	= checkmark.svg
 CHECKMARK_ANSWER	= expected_checkmark.svg
 
 
-
-all: directories run_svgtest run_srctest run_sinktest run_writertest run_xmltest run_xmlbstest run_osmtest gen_html
+all: directories run_svgtest run_srctest run_sinktest run_xmltest run_writertest run_xmlbstest run_osmtest run_bsidxtest run_geoutiltest gen_html
 
 run_svgtest: $(TEST_SVG_TARGET)
 	$(TEST_SVG_TARGET)
@@ -115,14 +130,26 @@ run_xmltest: $(TEST_XML_TARGET)
 run_writertest: $(TEST_WRITER_TARGET)
 	$(TEST_WRITER_TARGET)
 
-run_tpcltest: $(TEST_TPCL_TARGET)
-	$(TEST_TPCL_TARGET)
-
 run_osmtest: $(TEST_OSM_TARGET)
 	$(TEST_OSM_TARGET)
 
 run_xmlbstest: $(TEST_XMLBS_TARGET)
 	$(TEST_XMLBS_TARGET)
+
+
+run_tpcltest: $(TEST_TPCL_TARGET)
+	$(TEST_TPCL_TARGET)
+
+run_bsidxtest: $(TEST_BSIDX_TARGET)
+	$(TEST_BSIDX_TARGET)
+
+run_smidxtest: $(TEST_SMIDX_TARGET)
+	$(TEST_SMIDX_TARGET)
+
+run_geoutiltest: $(TEST_GEOUTIL_TARGET)
+	$(TEST_GEOUTIL_TARGET)
+
+
 
 gen_html:
 	lcov --capture --directory . --output-file $(TESTCOVER_DIR)/coverage.info --ignore-errors inconsistent,source
@@ -158,6 +185,16 @@ $(TEST_TPCL_TARGET): $(TEST_TPCL_OBJ_FILES)
 
 $(TEST_OSM_TARGET): $(TEST_OSM_OBJ_FILES)
 	$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_OSM_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_OSM_TARGET)
+
+
+$(TEST_BSIDX_TARGET): $(TEST_BSIDX_OBJ_FILES)
+		$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_BSIDX_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_BSIDX_TARGET)
+
+$(TEST_SMIDX_TARGET): $(TEST_SMIDX_OBJ_FILES)
+		$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_SMIDX_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_SMIDX_TARGET)
+
+$(TEST_GEOUTIL_TARGET): $(TEST_GEOUTIL_OBJ_FILES)
+		$(CXX) $(TEST_CFLAGS) $(TEST_CPPFLAGS) $(TEST_GEOUTIL_OBJ_FILES) $(TEST_LDFLAGS) -o $(TEST_GEOUTIL_TARGET)
 
 
 $(TEST_SVG_OBJ): $(SRC_DIR)/svg.c
